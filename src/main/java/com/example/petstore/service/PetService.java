@@ -1,7 +1,7 @@
 package com.example.petstore.service;
 
-import com.example.petstore.dao.PetDao;
 import com.example.petstore.entity.Pet;
+import com.example.petstore.repository.PetRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,29 +9,31 @@ import java.util.Optional;
 
 @Component
 public class PetService {
-    private final PetDao petDao;
+    private final PetRepository petRepository;
 
-    public PetService(PetDao petDao) {
-        this.petDao = petDao;
+    public PetService(PetRepository petRepository) {
+        this.petRepository = petRepository;
     }
 
     public Pet save(Pet pet){
-        return petDao.save(pet);
+        return petRepository.save(pet);
     }
 
     public void update(Pet pet){
-        petDao.update(pet);
+        petRepository.save(new Pet(pet));
     }
 
     public List<Pet> getAll(){
-        return petDao.getAll();
+        return petRepository.findAll();
     }
 
     public Optional<Pet> find(long id){
-        return Optional.ofNullable(petDao.findById(id));
+        return petRepository.findById(id);
     }
 
     public void delete(long id){
-        petDao.delete(id);
+        petRepository.deleteById(id);
     }
+
+
 }

@@ -4,6 +4,7 @@ import com.example.petstore.entity.Pet;
 import com.example.petstore.entity.constants.PetStatus;
 import com.example.petstore.service.PetService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class PetResource {
             return ResponseEntity.status(405).build();
         } else {
             Pet saved = petService.save(pet);
-            return ResponseEntity.status(200).body(saved);
+            return ResponseEntity.status(HttpStatus.OK).body(saved);
         }
     }
 
@@ -34,10 +35,10 @@ public class PetResource {
             return ResponseEntity.status(405).build();
         } else {
             if (petService.find(pet.getId()).isEmpty()) {
-                return ResponseEntity.status(404).build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             petService.update(pet);
-            return ResponseEntity.status(200).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 
@@ -46,7 +47,7 @@ public class PetResource {
         if(!status.equals(PetStatus.AVAILABLE) &&
                 !status.equals(PetStatus.SOLD) &&
                 !status.equals(PetStatus.PENDING)){
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             List<Pet> collected = petService.getAll().stream().filter(pet -> pet.getStatus().equals(status)).collect(Collectors.toList());
             return ResponseEntity.ok(new ArrayList<>(collected));
@@ -56,11 +57,11 @@ public class PetResource {
     @GetMapping("/{petId}")
     public ResponseEntity<Pet> findById(@PathVariable long petId){
         if(petId<=0){
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         Optional<Pet> pet = petService.find(petId);
         if(pet.isEmpty()){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(pet.get());
     }
@@ -74,7 +75,7 @@ public class PetResource {
             pet.setName(name);
             pet.setStatus(status);
             petService.update(pet);
-            return ResponseEntity.status(200).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 
@@ -82,12 +83,12 @@ public class PetResource {
     public ResponseEntity<?> deleteById(@PathVariable long petId){
         Optional<Pet> pet = petService.find(petId);
         if(petId<=0){
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         if(pet.isEmpty()){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         petService.delete(petId);
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

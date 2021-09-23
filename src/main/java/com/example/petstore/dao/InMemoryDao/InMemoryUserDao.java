@@ -2,6 +2,7 @@ package com.example.petstore.dao.InMemoryDao;
 
 import com.example.petstore.dao.UserDao;
 import com.example.petstore.entity.User;
+import com.example.petstore.entity.constants.UserStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
-    public void setStatus(long userId, int status) {
+    public void setStatus(long userId, UserStatus status) {
         User currUser;
         for (User user : users) {
             if(user.getId()==userId){

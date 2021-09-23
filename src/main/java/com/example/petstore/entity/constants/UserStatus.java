@@ -1,8 +1,11 @@
 package com.example.petstore.entity.constants;
 
-public interface UserStatus {
-    int UNREGISTERED = 0;
-    int REGISTERED = 1;
-    int AUTHORIZED = 2;
-    int LOGGED_OUT = 3;
+public enum UserStatus {
+    UNREGISTERED("unregistered",0),
+    REGISTERED("registered", 1),
+    AUTHORIZED("authorized", 2),
+    LOGGED_OUT("logged-out",3);
+
+    UserStatus(String status, int intStatus) {
+    }
 }
